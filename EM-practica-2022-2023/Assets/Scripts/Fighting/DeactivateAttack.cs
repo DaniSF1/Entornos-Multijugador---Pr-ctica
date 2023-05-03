@@ -10,7 +10,7 @@ public class DeactivateAttack : NetworkBehaviour
     {
         if(!IsServer)
         {
-            this.gameObject.SetActive(false);
+            this.gameObject.GetComponent<PolygonCollider2D>().isTrigger = true;
         }
     }
 }

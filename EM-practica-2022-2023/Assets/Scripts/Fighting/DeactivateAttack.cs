@@ -12,6 +12,5 @@ public class DeactivateAttack : NetworkBehaviour
         {
             this.gameObject.SetActive(false);
         }
-        
     }
 }

@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6378139553460788952}
   - component: {fileID: 6684051730315639542}
   - component: {fileID: 1360442965333676557}
+  - component: {fileID: 3675974902640494423}
+  - component: {fileID: 5398713368006697934}
   m_Layer: 6
   m_Name: WeaponAttack2
   m_TagString: Untagged
@@ -87,7 +89,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dad698c3f1de34399412ad238a4519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3675974902640494423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993294380899899228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6855f65c8675b414a94afb635cc8f6a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   effectsPrefab: {fileID: 5011862488382498431, guid: ccf5b78470c35b9449a921ee0e3c17e9, type: 3}
+--- !u!114 &5398713368006697934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993294380899899228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328cb22dc723cd94288122e029ad1509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2268116844751448805
 GameObject:
   m_ObjectHideFlags: 0
@@ -97,7 +123,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7089609524854178920}
-  - component: {fileID: 8918345060408069454}
   m_Layer: 6
   m_Name: Attacks
   m_TagString: Untagged
@@ -122,18 +147,6 @@ Transform:
   m_Father: {fileID: 3010630682321582528}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8918345060408069454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2268116844751448805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 328cb22dc723cd94288122e029ad1509, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3010630682321582541
 GameObject:
   m_ObjectHideFlags: 0
@@ -432,6 +445,8 @@ GameObject:
   - component: {fileID: 3010630682624800428}
   - component: {fileID: 3562887181977724200}
   - component: {fileID: 9018091855819766110}
+  - component: {fileID: 5172730183711631252}
+  - component: {fileID: 6277281541533408140}
   m_Layer: 0
   m_Name: WeaponAttack1
   m_TagString: Untagged
@@ -508,4 +523,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dad698c3f1de34399412ad238a4519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5172730183711631252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010630682624800431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6855f65c8675b414a94afb635cc8f6a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   effectsPrefab: {fileID: 5011862488382498431, guid: ccf5b78470c35b9449a921ee0e3c17e9, type: 3}
+--- !u!114 &6277281541533408140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010630682624800431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328cb22dc723cd94288122e029ad1509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

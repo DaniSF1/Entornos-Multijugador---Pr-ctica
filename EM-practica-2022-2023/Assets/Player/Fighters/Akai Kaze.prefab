@@ -14,7 +14,11 @@ GameObject:
   - component: {fileID: 1279163059010513264}
   - component: {fileID: 5052676979328557421}
   - component: {fileID: 1279163059010513265}
+  - component: {fileID: -1793913483297123425}
   - component: {fileID: 6444215616322588684}
+  - component: {fileID: 8573356382264959464}
+  - component: {fileID: -4842217512695288665}
+  - component: {fileID: -4028761285725146904}
   m_Layer: 6
   m_Name: Akai Kaze
   m_TagString: Untagged
@@ -130,8 +134,8 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 6
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!61 &5052676979328557421
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -154,7 +158,7 @@ BoxCollider2D:
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
-  m_AutoTiling: 1
+  m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.32238042, y: 0.6886885}
   m_EdgeRadius: 0
@@ -172,6 +176,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 3
   jumpAmount: 1.2
+--- !u!114 &-1793913483297123425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a236bb08e3145b6819e0d9da63e82c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6444215616322588684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +204,58 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &8573356382264959464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+--- !u!114 &-4842217512695288665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-4028761285725146904
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1279163059010513274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 1279163059010513269}
 --- !u!1 &1279163059404656106
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,6 +331,8 @@ GameObject:
   - component: {fileID: 7606685028906649749}
   - component: {fileID: 1194684208166540514}
   - component: {fileID: 5600483238005168429}
+  - component: {fileID: 5606323468945060831}
+  - component: {fileID: 6327989496333992254}
   m_Layer: 8
   m_Name: WeaponAttack1
   m_TagString: Untagged
@@ -330,7 +400,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dad698c3f1de34399412ad238a4519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5606323468945060831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805699055951159437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6855f65c8675b414a94afb635cc8f6a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   effectsPrefab: {fileID: 5011862488382498431, guid: ccf5b78470c35b9449a921ee0e3c17e9, type: 3}
+--- !u!114 &6327989496333992254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805699055951159437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328cb22dc723cd94288122e029ad1509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6240667491261861763
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,6 +436,8 @@ GameObject:
   - component: {fileID: 8917461478260417039}
   - component: {fileID: 2328692754943562302}
   - component: {fileID: 5399960131320595288}
+  - component: {fileID: 4151135791629184444}
+  - component: {fileID: 7975976866118118703}
   m_Layer: 8
   m_Name: WeaponAttack2
   m_TagString: Untagged
@@ -412,4 +508,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62dad698c3f1de34399412ad238a4519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4151135791629184444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240667491261861763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6855f65c8675b414a94afb635cc8f6a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   effectsPrefab: {fileID: 5011862488382498431, guid: ccf5b78470c35b9449a921ee0e3c17e9, type: 3}
+--- !u!114 &7975976866118118703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240667491261861763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 328cb22dc723cd94288122e029ad1509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

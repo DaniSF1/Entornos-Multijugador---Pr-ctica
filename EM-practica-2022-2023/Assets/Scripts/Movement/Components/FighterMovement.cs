@@ -15,7 +15,6 @@ namespace Movement.Components
         public float health = 100.0f;
         public float damage = 10.0f;
 
-
         private Rigidbody2D _rigidbody2D;           //RigidBody del personaje
         private Animator _animator;                 //Definimos un animador
         private NetworkAnimator _networkAnimator;   //Definimos un network animator
@@ -93,7 +92,7 @@ namespace Movement.Components
         {
             JumpServerRpc(stage);
             /*
-                         switch (stage)
+            switch (stage)
             {
                 case IJumperReceiver.JumpStage.Jumping:     //Si el personaje esta saltando...
                     if (_grounded)                          //y esta en el suelo...
@@ -140,11 +139,19 @@ namespace Movement.Components
         public void TakeHit()
         {
             //TakeHitServerRpc();
+            health -= damage;
+            Debug.Log($"Other player's healt: {health}");
             _networkAnimator.SetTrigger(AnimatorHit);
+            if(health <= 0)
+            {
+                Die();
+            }
         }
 
         public void Die()
         {
+            speed = 0;
+            jumpAmount = 0;
             _networkAnimator.SetTrigger(AnimatorDie);
         }
     }

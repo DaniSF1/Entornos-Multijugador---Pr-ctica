@@ -14,6 +14,7 @@ namespace Fighting
         {
             GameObject otherObject = collision.gameObject;              //Guardamos el objeto con el que colisiona
             Debug.Log($"Sword collision with {otherObject.name}");
+
             
             Vector3 hitpoint = collision.GetContact(0).point;           //Ponemos en el lugar de la colisión dicho efecto
             GetComponent<WeaponFX>().ColisionParticulaClientRpc(Hit03, hitpoint);

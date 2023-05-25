@@ -1,3 +1,4 @@
+using Netcode;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ namespace UI
         public GameObject debugPanel;
         public Button hostButton;
         public Button clientButton;
+        public InputField playerName;
 
         private void Start()
         {

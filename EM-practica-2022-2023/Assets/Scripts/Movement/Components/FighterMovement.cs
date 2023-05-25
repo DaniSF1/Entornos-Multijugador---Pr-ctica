@@ -12,6 +12,9 @@ namespace Movement.Components
     {
         public float speed = 1.0f;
         public float jumpAmount = 1.0f;
+        public float health = 100.0f;
+        public float damage = 10.0f;
+
 
         private Rigidbody2D _rigidbody2D;           //RigidBody del personaje
         private Animator _animator;                 //Definimos un animador

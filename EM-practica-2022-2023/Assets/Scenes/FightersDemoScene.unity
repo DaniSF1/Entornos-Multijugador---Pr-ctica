@@ -450,7 +450,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1279163059010513274, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
       propertyPath: m_Name
-      value: MartialHero
+      value: AkaiKaze
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
@@ -572,7 +572,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7467422803991183054, guid: eefd1982948af6448a89a5714bb66417, type: 3}
       propertyPath: m_Name
-      value: MartialHero2
+      value: Oni
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eefd1982948af6448a89a5714bb66417, type: 3}

@@ -14,7 +14,7 @@ namespace Movement.Components
         public float jumpAmount = 1.0f;
         public float health = 100.0f;
         public float damage = 10.0f;
-
+        public bool dead = false;
 
         private Rigidbody2D _rigidbody2D;           //RigidBody del personaje
         private Animator _animator;                 //Definimos un animador
@@ -61,6 +61,7 @@ namespace Movement.Components
 
         public void Move(IMoveableReceiver.Direction direction)
         {
+            if (dead) return;
             MoveServerRpc(direction);
             /*
             //if (direction == IMoveableReceiver.Direction.None)  //Si estamos quietos no nos movemos
@@ -78,6 +79,7 @@ namespace Movement.Components
         [ServerRpc]
         public void MoveServerRpc(IMoveableReceiver.Direction direction)
         {
+            if (dead) return;
             if (direction == IMoveableReceiver.Direction.None)  //Si estamos quietos no nos movemos
             {
                 this._direction = Vector3.zero;
@@ -91,9 +93,10 @@ namespace Movement.Components
 
         public void Jump(IJumperReceiver.JumpStage stage)
         {
+            if (dead) return;
             JumpServerRpc(stage);
             /*
-                         switch (stage)
+            switch (stage)
             {
                 case IJumperReceiver.JumpStage.Jumping:     //Si el personaje esta saltando...
                     if (_grounded)                          //y esta en el suelo...
@@ -111,6 +114,7 @@ namespace Movement.Components
         [ServerRpc]
         public void JumpServerRpc(IJumperReceiver.JumpStage stage)
         {
+            if (dead) return;
             switch (stage)
             {
                 case IJumperReceiver.JumpStage.Jumping:     //Si el personaje esta saltando...
@@ -140,11 +144,19 @@ namespace Movement.Components
         public void TakeHit()
         {
             //TakeHitServerRpc();
+            if (dead) return;
+            health -= damage;
+            Debug.Log($"Other player's healt: {health}");
             _networkAnimator.SetTrigger(AnimatorHit);
+            if(health <= 0)
+            {
+                Die();
+            }
         }
 
         public void Die()
         {
+            dead = true;
             _networkAnimator.SetTrigger(AnimatorDie);
         }
     }

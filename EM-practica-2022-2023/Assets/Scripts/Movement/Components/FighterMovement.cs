@@ -24,7 +24,11 @@ namespace Movement.Components
 
         private Vector3 _direction = Vector3.zero;  //Dirección del personaje
         private bool _grounded = true;              //Si el personaje está en el suelo o no
-        
+
+
+        //UI COSAS
+        public healthBar healthbar;
+
         //Animaciones del personaje
         private static readonly int AnimatorSpeed = Animator.StringToHash("speed");
         private static readonly int AnimatorVSpeed = Animator.StringToHash("vspeed");
@@ -42,6 +46,9 @@ namespace Movement.Components
 
             _feet = transform.Find("Feet");                     //Cogemos el objeto de tipo Feet
             _floor = LayerMask.GetMask("Floor");                //Cogemos la parte de la escena correspondiente al suelo
+        
+            //ui cosas
+            healthbar.SetMaxHealth(health);
         }
 
         void Update()
@@ -148,6 +155,8 @@ namespace Movement.Components
             health -= damage;
             Debug.Log($"Other player's healt: {health}");
             _networkAnimator.SetTrigger(AnimatorHit);
+            healthbar.setHealth(health);
+
             if(health <= 0)
             {
                 Die();

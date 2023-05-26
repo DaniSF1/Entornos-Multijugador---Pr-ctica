@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -12,7 +13,7 @@ namespace Movement.Components
     {
         public float speed = 1.0f;
         public float jumpAmount = 1.0f;
-        public float health = 100.0f;
+        public NetworkVariable<float> health = new NetworkVariable<float>();
         public float damage = 10.0f;
         public bool dead = false;
 
@@ -27,7 +28,8 @@ namespace Movement.Components
 
 
         //UI COSAS
-        private healthBar healthbar;
+        public healthBar healthbar;
+        private GUI gui;
 
         //Animaciones del personaje
         private static readonly int AnimatorSpeed = Animator.StringToHash("speed");
@@ -38,6 +40,19 @@ namespace Movement.Components
         private static readonly int AnimatorHit = Animator.StringToHash("hit");
         private static readonly int AnimatorDie = Animator.StringToHash("die");
 
+
+        void Awake()
+        {
+            health.Value = 100f;
+            health.OnValueChanged += HealthChange;
+            //gui = FindObjectOfType<GUI>();
+        }
+
+        private void HealthChange(float previousValue, float newValue)
+        {
+            healthbar.setHealth(newValue);
+        }
+
         void Start()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();         //Tomamos el rigidBody del personaje
@@ -46,9 +61,12 @@ namespace Movement.Components
 
             _feet = transform.Find("Feet");                     //Cogemos el objeto de tipo Feet
             _floor = LayerMask.GetMask("Floor");                //Cogemos la parte de la escena correspondiente al suelo
-        
+
+
             //ui cosas
-            healthbar.SetMaxHealth(health);
+            healthbar.SetMaxHealth(health.Value);
+            //gui.gameObject.SetActive(true);
+
         }
 
         void Update()
@@ -138,26 +156,22 @@ namespace Movement.Components
 
         public void Attack1()
         {
-            //Attack1ServerRpc();
             _networkAnimator.SetTrigger(AnimatorAttack1);
         }
 
         public void Attack2()
         {
-            //Attack2ServerRpc();
             _networkAnimator.SetTrigger(AnimatorAttack2);
         }
 
         public void TakeHit()
         {
-            //TakeHitServerRpc();
-            if (dead) return;
-            health -= damage;
+            if(!IsServer || dead) return;
+            health.Value -= damage;
             Debug.Log($"Other player's healt: {health}");
             _networkAnimator.SetTrigger(AnimatorHit);
-            healthbar.setHealth(health);
 
-            if(health <= 0)
+            if(health.Value <= 0)
             {
                 Die();
             }

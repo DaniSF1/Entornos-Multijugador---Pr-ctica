@@ -29,7 +29,6 @@ namespace Movement.Components
 
         //UI COSAS
         public healthBar healthbar;
-        private GUI gui;
 
         //Animaciones del personaje
         private static readonly int AnimatorSpeed = Animator.StringToHash("speed");

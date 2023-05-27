@@ -758,12 +758,28 @@ PrefabInstance:
       propertyPath: m_Name
       value: healthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 7443308685835751158, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443308685969347898, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7443308686098279161, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443308686098279161, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443308686098279162, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7443308686254992254, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

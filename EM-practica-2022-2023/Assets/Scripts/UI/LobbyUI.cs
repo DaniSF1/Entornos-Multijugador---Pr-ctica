@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Lobby.UI { 
@@ -13,6 +14,7 @@ namespace Lobby.UI {
         [SerializeField] private LobbyPlayer[] lobbyPlayerCards;
         [SerializeField] private Button startGameButton;
         [SerializeField] private TMP_InputField playerName;
+        [SerializeField] private GameObject lobbyPanel;
 
         private NetworkList<LobbyPlayerState> lobbyPlayers;
 
@@ -65,7 +67,7 @@ namespace Lobby.UI {
 
         private bool EveryoneReady()
         {
-            if(lobbyPlayers.Count< 2)
+            if(lobbyPlayers.Count< 1)
             {
                 return false;
             }
@@ -97,7 +99,7 @@ namespace Lobby.UI {
         {
             foreach (var player in lobbyPlayers) { if (player.ClientId == clientId) { return;  } }
             Debug.Log(clientId);
-            lobbyPlayers.Add(new LobbyPlayerState(clientId, playerName.text, false, 0));
+            lobbyPlayers.Add(new LobbyPlayerState(clientId, playerName.text, false, 0, false));
         }
 
         [ServerRpc (RequireOwnership = false)]
@@ -106,7 +108,8 @@ namespace Lobby.UI {
             for (int i = 0; i < lobbyPlayers.Count; i++)
             {
                 if (lobbyPlayers[i].ClientId == serverRpcParams.Receive.SenderClientId) { 
-                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName, !lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId);
+                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName, 
+                        !lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId, lobbyPlayers[i].InGame);
                 }
             }
         }
@@ -119,7 +122,7 @@ namespace Lobby.UI {
                 if (lobbyPlayers[i].ClientId == serverRpcParams.Receive.SenderClientId)
                 {
                     int id = (lobbyPlayers[i].CharacterId + 1) % 3;
-                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName, lobbyPlayers[i].IsReady, id);
+                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName, lobbyPlayers[i].IsReady, id, lobbyPlayers[i].InGame);
                 }
             }
         }
@@ -131,7 +134,29 @@ namespace Lobby.UI {
 
             if(!EveryoneReady()) { return; }
 
-            //START GAME
+            for (int i = 0; i < lobbyPlayers.Count; i++)
+            {
+                lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName,
+                       lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId, true);
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void NameChangeServerRpc(ServerRpcParams serverRpcParams = default)
+        {
+            for (int i = 0; i < lobbyPlayers.Count; i++)
+            {
+                if (lobbyPlayers[i].ClientId == serverRpcParams.Receive.SenderClientId)
+                {
+                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, playerName.text, 
+                        lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId, lobbyPlayers[i].InGame);
+                }
+            }
+        }
+
+        public void OnNameChanged()
+        {
+            NameChangeServerRpc();
         }
 
         public void OnReadyClicked()

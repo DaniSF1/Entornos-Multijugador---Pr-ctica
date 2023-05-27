@@ -13,17 +13,23 @@ public class LobbyPlayer : MonoBehaviour
     [SerializeField] private TMP_Text playerDisplayNameText;
     [SerializeField] private Image selectedCharacter;
     [SerializeField] private Toggle isReadyToggle;
+    [SerializeField] private GameObject lobbyPanel;
+
 
     [SerializeField] private Sprite[] characterImages;
 
+    public static Action<LobbyPlayerState> OnGameStart;
     public void UdpateDisplay(LobbyPlayerState lobbyPlayerState)
     {
         playerDisplayNameText.text = Convert.ToString(lobbyPlayerState.PlayerName);
         isReadyToggle.isOn = lobbyPlayerState.IsReady;
 
-
+        lobbyPanel.SetActive(!lobbyPlayerState.InGame);
+        if (lobbyPlayerState.InGame == true) { OnGameStart?.Invoke(lobbyPlayerState); }
+        
         waitingForPlayerPanel.SetActive(false);
         playerDataPanel.SetActive(true);
+        Debug.Log(lobbyPlayerState.CharacterId);
         selectedCharacter.sprite = characterImages[lobbyPlayerState.CharacterId];
     }
 

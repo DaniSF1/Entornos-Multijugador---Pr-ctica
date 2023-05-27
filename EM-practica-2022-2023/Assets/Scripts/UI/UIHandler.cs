@@ -34,10 +34,5 @@ namespace UI
             debugPanel.SetActive(false);
             lobbyUI.SetActive(true);
         }
-
-        public void ChangeScene()
-        {
-            SceneManager.LoadScene("Lobby");
-        }
     }
 }

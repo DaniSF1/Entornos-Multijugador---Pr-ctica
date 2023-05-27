@@ -9,13 +9,21 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+
     static List<GameObject> jugadores = new List<GameObject>();
     public GameObject wincanvas;
     public Text winnerName;
+    public static NetworkVariable<float> time = new NetworkVariable<float>();
+
+    private void Awake()
+    {
+        time.Value = 60f;
+        time.OnValueChanged += TimeVictoryCondition;
+    }
 
     public static void AddPlayer(GameObject player)
     {
-        Debug.Log("Añadido un jugador");
+        Debug.Log("AÃ±adido un jugador");
         jugadores.Add(player);
     }
 
@@ -37,11 +45,36 @@ public class GameManager : MonoBehaviour
         wincanvas.SetActive(false);
     }
 
+    public static void TimeVictoryCondition(float previousValue, float newValue)
+    {
+        if (newValue > 0) return;
+        GameObject ganador = EscogerGanador();
+        VictoryCondition(ganador);
+    }
+
+    public static GameObject EscogerGanador()
+    {
+        int aux;
+        GameObject ganador = null;
+        foreach (GameObject go in jugadores) 
+        { 
+            if(go.GetComponent<FighterMovement>().health.Value >= 0)
+            {
+                aux = (int) go.GetComponent<FighterMovement>().health.Value;
+                ganador = go;
+            }
+        }
+        return ganador;
+    }
+
+
     public void Update()
     {
         foreach (GameObject player in jugadores)
         {
             if (player.GetComponent<FighterMovement>().dead == true)
+
+        time.Value -= Time.deltaTime;
             {
                 RemovePlayer(player);
             }

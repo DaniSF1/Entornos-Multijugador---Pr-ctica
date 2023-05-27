@@ -1,3 +1,4 @@
+using Lobby.UI;
 using Movement.Components;
 using System;
 using System.Collections;
@@ -9,17 +10,19 @@ using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
-
     static List<GameObject> jugadores = new List<GameObject>();
     public GameObject wincanvas;
     public Text winnerName;
     [SerializeField] Text timerText;
-    static float timeStart = 20f;
+    static float timeStart = 180f;
     static float time;
+    static bool matchStarted;
 
     private void Awake()
     {
         time = timeStart;
+        matchStarted = false;
+        LobbyPlayer.OnGameStart += (a) => matchStarted = true;
     }
 
     public static void AddPlayer(GameObject player)
@@ -48,11 +51,11 @@ public class GameManager : NetworkBehaviour
 
     public static string EscogerGanador()
     {
-        int aux;
+        int aux = 0;
         GameObject ganador = null;
         foreach (GameObject go in jugadores) 
         { 
-            if(go.GetComponent<FighterMovement>().health.Value >= 0)
+            if(go.GetComponent<FighterMovement>().health.Value >= aux)
             {
                 aux = (int) go.GetComponent<FighterMovement>().health.Value;
                 ganador = go;
@@ -61,10 +64,9 @@ public class GameManager : NetworkBehaviour
         return ganador.name;
     }
 
-
     public void Update()
     {
-        if (!IsServer) return;
+        if (!IsServer || !matchStarted) return;
         time -= Time.deltaTime;
 
         UpdateTimerClientRpc(time);

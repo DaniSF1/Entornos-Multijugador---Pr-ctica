@@ -718,7 +718,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 431959294}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1350096453}
+        m_TargetAssemblyTypeName: UI.UIHandler, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &431959294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1366,6 +1378,7 @@ MonoBehaviour:
   debugPanel: {fileID: 1198413822}
   hostButton: {fileID: 1760119121}
   clientButton: {fileID: 431959293}
+  playerName: {fileID: 657929357}
 --- !u!4 &1350096454
 Transform:
   m_ObjectHideFlags: 0
@@ -1465,7 +1478,7 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1581380590}
-    PlayerPrefab: {fileID: 2629072033587473415, guid: 85d5cc8725197694ea4e7b3ef26c46cf, type: 3}
+    PlayerPrefab: {fileID: 0}
     NetworkPrefabs:
     - Override: 0
       Prefab: {fileID: 2629072033587473415, guid: 85d5cc8725197694ea4e7b3ef26c46cf, type: 3}
@@ -1484,6 +1497,11 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 3010630682321582541, guid: 06b98e5343c113147985cd4116ac1cdb, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 4507216154514871373, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
@@ -1673,7 +1691,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1760119122}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1350096453}
+        m_TargetAssemblyTypeName: UI.UIHandler, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1760119122
 MonoBehaviour:
   m_ObjectHideFlags: 0

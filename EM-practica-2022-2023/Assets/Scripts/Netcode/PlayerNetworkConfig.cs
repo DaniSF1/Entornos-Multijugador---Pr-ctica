@@ -1,3 +1,4 @@
+using Lobby.UI;
 using UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -17,8 +18,16 @@ namespace Netcode
 
         public override void OnNetworkSpawn()
         {
+            LobbyPlayer.OnGameStart += InstantiateCharacter;
+            //if (!IsOwner) return;
+            //InstantiateCharacterServerRpc(OwnerClientId);   //Si no el jugador no es el host, hacemos una llamada RCP para el servidor
+        }
+
+        public void InstantiateCharacter(LobbyPlayerState playerData)
+        {
             if (!IsOwner) return;
-            InstantiateCharacterServerRpc(OwnerClientId);   //Si no el jugador no es el host, hacemos una llamada RCP para el servidor
+            InstantiateCharacterServerRpc(OwnerClientId, playerData);
+            
         }
 
         public override void OnDestroy()
@@ -29,13 +38,27 @@ namespace Netcode
         }
 
         [ServerRpc]
-        public void InstantiateCharacterServerRpc(ulong id)
+        public void InstantiateCharacterServerRpc(ulong id, LobbyPlayerState playerData)
         {
-            if (characterPrefab == null) characterPrefab = Huntress;
-            characterGameObject = Instantiate(characterPrefab);                         //Tomamos el prefab del personaje y lo hacemos un gameobject
-            GameManager.AddPlayer(characterGameObject);
-            characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y 
-            characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
+            if (id != playerData.ClientId) return;
+            switch(playerData.CharacterId)
+            {
+                case 0:
+                    getHuntress();
+                    break;
+                case 1:
+                    getOni();
+                    break;
+                case 2:
+                    getAkai();
+                    break;  
+            }
+            if (characterGameObject == null) { 
+                characterGameObject = Instantiate(characterPrefab);              //Tomamos el prefab del personaje y lo hacemos un gameobject
+                GameManager.AddPlayer(characterGameObject);
+                characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y 
+                characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
+            }
         }
 
         public void getOni()

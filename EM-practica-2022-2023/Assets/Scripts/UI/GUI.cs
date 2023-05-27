@@ -9,6 +9,6 @@ public class GUI : MonoBehaviour
     void Start()
     {
         gui = this.gameObject;
-        gui.SetActive(false);
+        gui.SetActive(true);
     }
 }

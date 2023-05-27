@@ -15,7 +15,6 @@ namespace Netcode
         public GameObject Oni;
         public GameObject Huntress;
         public GameObject Akai_Kaze;
-        private GameObject characterGameObject;
 
         public override void OnNetworkSpawn()
         {
@@ -56,6 +55,7 @@ namespace Netcode
             }
             if (characterGameObject == null) { 
                 characterGameObject = Instantiate(characterPrefab);              //Tomamos el prefab del personaje y lo hacemos un gameobject
+                GameManager.AddPlayer(characterGameObject);
                 characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y 
                 characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
             }

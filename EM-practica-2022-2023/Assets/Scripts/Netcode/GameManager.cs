@@ -7,19 +7,19 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
 
     static List<GameObject> jugadores = new List<GameObject>();
     public GameObject wincanvas;
     public Text winnerName;
-
-    public static NetworkVariable<float> time = new NetworkVariable<float>();
+    [SerializeField] Text timerText;
+    static float timeStart = 20f;
+    static float time;
 
     private void Awake()
     {
-        time.Value = 60f;
-        time.OnValueChanged += TimeVictoryCondition;
+        time = timeStart;
     }
 
     public static void AddPlayer(GameObject player)
@@ -34,9 +34,9 @@ public class GameManager : MonoBehaviour
         jugadores.Remove(player);
     }
 
-    public static void VictoryCondition(GameObject player)
+    public static void VictoryCondition(string player)
     {
-        Debug.Log($"Ha ganado {player.name}");
+        Debug.Log($"Ha ganado {player}");
 
     }
 
@@ -46,14 +46,7 @@ public class GameManager : MonoBehaviour
         wincanvas.SetActive(false);
     }
 
-    public static void TimeVictoryCondition(float previousValue, float newValue)
-    {
-        if (newValue > 0) return;
-        GameObject ganador = EscogerGanador();
-        VictoryCondition(ganador);
-    }
-
-    public static GameObject EscogerGanador()
+    public static string EscogerGanador()
     {
         int aux;
         GameObject ganador = null;
@@ -65,12 +58,17 @@ public class GameManager : MonoBehaviour
                 ganador = go;
             }
         }
-        return ganador;
+        return ganador.name;
     }
 
 
     public void Update()
     {
+        if (!IsServer) return;
+        time -= Time.deltaTime;
+
+        UpdateTimerClientRpc(time);
+
         foreach (GameObject player in jugadores)
         {
             if (player.GetComponent<FighterMovement>().dead == true)
@@ -79,19 +77,41 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (jugadores.Count == 1)
+        if (time <= timeStart - 10)
         {
-            VictoryCondition(jugadores.First());
-            string winner = (jugadores.First().name);
-            winnerName.text = winner;
-            wincanvas.SetActive(true);
+            if (jugadores.Count == 1 || time <= 0)
+            {
+                string player;
+                if (jugadores.Count == 1)
+                {
+                    player = jugadores[0].name;
+                }
+                else
+                {
+                    player = EscogerGanador();
+                }
+
+                WinClientRpc(player);
+            }
         }
-        UpdateServerRpc();
     }
 
-    [ServerRpc]
-    public void UpdateServerRpc()
+    [ClientRpc]
+    public void WinClientRpc(string win)
     {
-        time.Value -= Time.deltaTime;
+        VictoryCondition(win);
+        string winner = win;
+        winnerName.text = winner;
+        wincanvas.SetActive(true);
+    }
+
+    [ClientRpc]
+    public void UpdateTimerClientRpc(float timeRemaining)
+    {
+        if (timeRemaining <= 0)
+        {
+            timeRemaining = 0;
+        }
+        timerText.text = timeRemaining.ToString("0.0");
     }
 }

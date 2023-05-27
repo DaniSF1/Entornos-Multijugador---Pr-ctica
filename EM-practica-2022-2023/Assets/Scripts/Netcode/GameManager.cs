@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     static List<GameObject> jugadores = new List<GameObject>();
     public GameObject wincanvas;
     public Text winnerName;
+
     public static NetworkVariable<float> time = new NetworkVariable<float>();
 
     private void Awake()
@@ -70,11 +71,11 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
+        time.Value -= Time.deltaTime;
+
         foreach (GameObject player in jugadores)
         {
             if (player.GetComponent<FighterMovement>().dead == true)
-
-        time.Value -= Time.deltaTime;
             {
                 RemovePlayer(player);
             }

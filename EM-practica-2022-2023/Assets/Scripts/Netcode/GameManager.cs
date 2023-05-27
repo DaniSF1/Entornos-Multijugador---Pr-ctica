@@ -71,8 +71,6 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        time.Value -= Time.deltaTime;
-
         foreach (GameObject player in jugadores)
         {
             if (player.GetComponent<FighterMovement>().dead == true)
@@ -88,5 +86,12 @@ public class GameManager : MonoBehaviour
             winnerName.text = winner;
             wincanvas.SetActive(true);
         }
+        UpdateServerRpc();
+    }
+
+    [ServerRpc]
+    public void UpdateServerRpc()
+    {
+        time.Value -= Time.deltaTime;
     }
 }

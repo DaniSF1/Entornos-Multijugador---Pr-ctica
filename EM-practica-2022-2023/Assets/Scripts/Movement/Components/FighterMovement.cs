@@ -44,7 +44,6 @@ namespace Movement.Components
         {
             health.Value = 100f;
             health.OnValueChanged += HealthChange;
-            //gui = FindObjectOfType<GUI>();
         }
 
         private void HealthChange(float previousValue, float newValue)

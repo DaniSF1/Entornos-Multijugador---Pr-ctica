@@ -5,10 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static List<GameObject> jugadores = new List<GameObject>();
+
+    static List<GameObject> jugadores = new List<GameObject>();
+    public GameObject wincanvas;
+    public Text winnerName;
+
     public static NetworkVariable<float> time = new NetworkVariable<float>();
 
     private void Awake()
@@ -19,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     public static void AddPlayer(GameObject player)
     {
-        Debug.Log("Añadido un jugador");
+        Debug.Log("AÃ±adido un jugador");
         jugadores.Add(player);
     }
 
@@ -32,6 +37,13 @@ public class GameManager : MonoBehaviour
     public static void VictoryCondition(GameObject player)
     {
         Debug.Log($"Ha ganado {player.name}");
+
+    }
+
+    public void Start()
+    {
+       // winnerName = wincanvas.GetComponent<Text>();
+        wincanvas.SetActive(false);
     }
 
     public static void TimeVictoryCondition(float previousValue, float newValue)
@@ -59,9 +71,9 @@ public class GameManager : MonoBehaviour
 
     public void Update()
     {
-        foreach (GameObject player in jugadores) 
-        { 
-            if(player.GetComponent<FighterMovement>().dead == true)
+        foreach (GameObject player in jugadores)
+        {
+            if (player.GetComponent<FighterMovement>().dead == true)
             {
                 RemovePlayer(player);
             }
@@ -70,6 +82,9 @@ public class GameManager : MonoBehaviour
         if (jugadores.Count == 1)
         {
             VictoryCondition(jugadores.First());
+            string winner = (jugadores.First().name);
+            winnerName.text = winner;
+            wincanvas.SetActive(true);
         }
         UpdateServerRpc();
     }

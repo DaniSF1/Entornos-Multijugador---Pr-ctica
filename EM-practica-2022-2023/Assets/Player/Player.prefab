@@ -64,3 +64,4 @@ MonoBehaviour:
   Oni: {fileID: 7467422803991183054, guid: eefd1982948af6448a89a5714bb66417, type: 3}
   Huntress: {fileID: 3010630682321582541, guid: 06b98e5343c113147985cd4116ac1cdb, type: 3}
   Akai_Kaze: {fileID: 1279163059010513274, guid: d263bf678e21bea42b448ff5227410c2, type: 3}
+  spawnPoints: {fileID: 1851687160997093997, guid: a94cccd459eba0648a230f7646bf56bf, type: 3}

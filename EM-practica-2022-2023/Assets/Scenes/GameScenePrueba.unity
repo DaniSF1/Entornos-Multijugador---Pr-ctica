@@ -13441,6 +13441,26 @@ PrefabInstance:
       propertyPath: playerName
       value: 
       objectReference: {fileID: 801355549}
+    - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
+      propertyPath: spawnPositions.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
+      propertyPath: spawnPositions.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
+      propertyPath: spawnPositions.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
+      propertyPath: spawnPositions.Array.data[2]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
+      propertyPath: spawnPositions.Array.data[3]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4507216154514871375, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2180951016

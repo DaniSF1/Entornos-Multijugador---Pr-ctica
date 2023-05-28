@@ -49,8 +49,6 @@ namespace Lobby.UI {
             }
         }
 
-
-
         public override void OnNetworkDespawn()
         { 
             if (IsServer)

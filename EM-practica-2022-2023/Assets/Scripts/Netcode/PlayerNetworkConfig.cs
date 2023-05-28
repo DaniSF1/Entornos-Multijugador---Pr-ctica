@@ -53,10 +53,12 @@ namespace Netcode
                     getAkai();
                     break;  
             }
-            if (characterGameObject == null) { 
-                characterGameObject = Instantiate(characterPrefab);              //Tomamos el prefab del personaje y lo hacemos un gameobject
+
+            if (characterGameObject == null) {
+                characterGameObject = Instantiate(characterPrefab);   //Tomamos el prefab del personaje y lo hacemos un gameobject
                 GameManager.AddPlayer(characterGameObject);
-                characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y 
+                characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y
+                transform.position = new Vector3(getPosX(id), 2.7f, 0);
                 characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
             }
         }
@@ -72,6 +74,28 @@ namespace Netcode
         public void getAkai()
         {
             characterPrefab = Akai_Kaze;
+        }
+
+        public float getPosX(ulong id)
+        {
+            float pos = 0f;
+            int idx = (int) id % 4;
+            switch(idx) 
+            {
+                case 0:
+                    pos = -8f;
+                    break; 
+                case 1:
+                    pos = -2f;
+                    break;
+                case 2:
+                    pos = 3f;
+                    break;
+                case 3:
+                    pos = 8f;
+                    break;
+            }
+            return pos;
         }
 
     }

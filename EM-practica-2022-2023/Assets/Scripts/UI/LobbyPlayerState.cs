@@ -14,6 +14,8 @@ public struct LobbyPlayerState : INetworkSerializable, IEquatable<LobbyPlayerSta
     public int CharacterId;
     public bool InGame;
 
+
+
     public LobbyPlayerState(ulong clientId, FixedString64Bytes playerName, bool isReady, int characterId, bool inGame)
     {
         ClientId = clientId;

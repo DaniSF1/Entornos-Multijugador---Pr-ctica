@@ -29,8 +29,6 @@ namespace Netcode
         {
             if (!IsOwner) return;
             InstantiateCharacterServerRpc(OwnerClientId, playerData);
-            characterGameObject.GetComponentInChildren<DisplayName>().SetNamesClientRpc(Convert.ToString(playerData.PlayerName));
-
         }
 
         public override void OnDestroy()
@@ -59,6 +57,7 @@ namespace Netcode
 
             if (characterGameObject == null) {
                 characterGameObject = Instantiate(characterPrefab);   //Tomamos el prefab del personaje y lo hacemos un gameobject
+                characterGameObject.name = playerData.PlayerName.ToString();
                 GameManager.AddPlayer(characterGameObject);
                 characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y
                 transform.position = new Vector3(getPosX(id), 2.7f, 0);

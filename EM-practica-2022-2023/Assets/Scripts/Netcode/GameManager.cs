@@ -10,9 +10,18 @@ using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
-    static List<GameObject> jugadores = new List<GameObject>();
+    public static List<GameObject> jugadores = new List<GameObject>();
+    public static List<string> names = new List<string>();
+    public static List<Text> playerNames = new List<Text>();
+
+    [SerializeField] Text p1Name;
+    [SerializeField] Text p2Name;
+    [SerializeField] Text p3Name;
+    [SerializeField] Text p4Name;
+
     public GameObject wincanvas;
     public Text winnerName;
+
     [SerializeField] Text timerText;
     static float timeStart = 180f;
     static float time;
@@ -23,24 +32,35 @@ public class GameManager : NetworkBehaviour
         time = timeStart;
         matchStarted = false;
         LobbyPlayer.OnGameStart += (a) => matchStarted = true;
+
+        playerNames.Add(p1Name);
+        playerNames.Add(p2Name);
+        playerNames.Add(p3Name);
+        playerNames.Add(p4Name);
+
+        p1Name.gameObject.SetActive(false);
+        p2Name.gameObject.SetActive(false);
+        p3Name.gameObject.SetActive(false);
+        p4Name.gameObject.SetActive(false);
     }
 
     public static void AddPlayer(GameObject player)
     {
         Debug.Log("Añadido un jugador");
         jugadores.Add(player);
+        names.Add(player.name);
     }
 
     public static void RemovePlayer(GameObject player)
     {
         Debug.Log("Jugador sacado");
         jugadores.Remove(player);
+        names.Remove(player.name);
     }
 
     public static void VictoryCondition(string player)
     {
         Debug.Log($"Ha ganado {player}");
-
     }
 
     public void Start()
@@ -78,6 +98,12 @@ public class GameManager : NetworkBehaviour
                 RemovePlayer(player);
             }
         }
+        
+        for (int i = 0; i < names.Count; i++)
+        {
+            string name = names[i];
+            SetNamesClientRpc(i, name);
+        }
 
         if (time <= timeStart - 10)
         {
@@ -96,6 +122,13 @@ public class GameManager : NetworkBehaviour
                 WinClientRpc(player);
             }
         }
+    }
+    
+    [ClientRpc]
+    public void SetNamesClientRpc(int i, string name)
+    {
+        playerNames[i].gameObject.SetActive(true);
+        playerNames[i].text = name;
     }
 
     [ClientRpc]

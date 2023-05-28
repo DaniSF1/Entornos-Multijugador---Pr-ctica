@@ -1,6 +1,7 @@
 ﻿using System;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -25,7 +26,6 @@ namespace Movement.Components
 
         private Vector3 _direction = Vector3.zero;  //Dirección del personaje
         private bool _grounded = true;              //Si el personaje está en el suelo o no
-
 
         //UI COSAS
         public healthBar healthbar;

@@ -1,4 +1,6 @@
 using Lobby.UI;
+using System;
+using TMPro;
 using UI;
 using Unity.Netcode;
 using UnityEngine;
@@ -27,7 +29,8 @@ namespace Netcode
         {
             if (!IsOwner) return;
             InstantiateCharacterServerRpc(OwnerClientId, playerData);
-            
+            characterGameObject.GetComponentInChildren<DisplayName>().SetNamesClientRpc(Convert.ToString(playerData.PlayerName));
+
         }
 
         public override void OnDestroy()
@@ -56,6 +59,7 @@ namespace Netcode
             if (characterGameObject == null) { 
                 characterGameObject = Instantiate(characterPrefab);              //Tomamos el prefab del personaje y lo hacemos un gameobject
                 GameManager.AddPlayer(characterGameObject);
+
                 characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y 
                 characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
             }
@@ -73,6 +77,5 @@ namespace Netcode
         {
             characterPrefab = Akai_Kaze;
         }
-
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -99,7 +100,19 @@ namespace Lobby.UI {
         {
             foreach (var player in lobbyPlayers) { if (player.ClientId == clientId) { return;  } }
             Debug.Log(clientId);
-            lobbyPlayers.Add(new LobbyPlayerState(clientId, playerName.text, false, 0, false));
+            lobbyPlayers.Add(new LobbyPlayerState(clientId, "Player_"+clientId, false, 0, false));
+        }
+
+        public LobbyPlayerState GetPlayer(ulong clientId)
+        {
+            for (int i = 0; i < lobbyPlayers.Count; i++)
+            {
+                if (lobbyPlayers[i].ClientId == clientId)
+                {
+                    return lobbyPlayers[i];
+                }
+            }
+            return new LobbyPlayerState();
         }
 
         [ServerRpc (RequireOwnership = false)]
@@ -142,21 +155,21 @@ namespace Lobby.UI {
         }
 
         [ServerRpc(RequireOwnership = false)]
-        private void NameChangeServerRpc(ServerRpcParams serverRpcParams = default)
+        private void NameChangeServerRpc(string name, ServerRpcParams serverRpcParams)
         {
             for (int i = 0; i < lobbyPlayers.Count; i++)
             {
                 if (lobbyPlayers[i].ClientId == serverRpcParams.Receive.SenderClientId)
                 {
-                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, playerName.text, 
+                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, name, 
                         lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId, lobbyPlayers[i].InGame);
                 }
             }
         }
 
-        public void OnNameChanged()
+        public void OnNameChanged(string name)
         {
-            NameChangeServerRpc();
+            NameChangeServerRpc(name, default);
         }
 
         public void OnReadyClicked()

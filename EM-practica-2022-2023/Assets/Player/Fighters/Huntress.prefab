@@ -197,7 +197,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &3193763874472312122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -699,14 +699,6 @@ PrefabInstance:
       value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 7443308685835751157, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.005
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443308685835751157, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.005
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443308685835751157, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -758,28 +750,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: healthBar
       objectReference: {fileID: 0}
-    - target: {fileID: 7443308685835751158, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443308685969347898, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7443308686098279161, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7443308686098279161, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443308686098279162, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 7443308686254992254, guid: f278bd2383bcc6d43ad6450d42e69276, type: 3}
-      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

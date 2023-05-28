@@ -13209,6 +13209,7 @@ PrefabInstance:
     - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
       propertyPath: playerName
       value:
+      objectReference: {fileID: 861104801}
       objectReference: {fileID: 801355549}
     - target: {fileID: 4507216154514871374, guid: ad0dbfb3eeb07e143baf78e8ef927c8d, type: 3}
       propertyPath: spawnPositions.Array.size

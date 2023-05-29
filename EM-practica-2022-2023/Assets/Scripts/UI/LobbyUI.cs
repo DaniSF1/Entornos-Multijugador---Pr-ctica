@@ -12,13 +12,14 @@ namespace Lobby.UI {
     public class LobbyUI : NetworkBehaviour
     {
         [Header("References")]
-        [SerializeField] private LobbyPlayer[] lobbyPlayerCards;
+        [SerializeField] private LobbyPlayer[] lobbyPlayerCards; //Gestiona la tarjeta de cada jugador
         [SerializeField] private Button startGameButton;
         [SerializeField] private TMP_InputField playerName;
-        [SerializeField] private GameObject lobbyPanel;
-        public static NetworkVariable<int> playerCount;
+        [SerializeField] private GameObject lobbyPanel; 
+        public static NetworkVariable<int> playerCount; //Cuenta la cantidad de jugadores que hay en el lobby, sirve para la funcion de sincronizar
+                                                        //el inicio
 
-        private NetworkList<LobbyPlayerState> lobbyPlayers;
+        private NetworkList<LobbyPlayerState> lobbyPlayers; //Guarda una lista con todos los jugadores en el lobby
 
         private void Awake()
         {
@@ -30,29 +31,28 @@ namespace Lobby.UI {
         public override void OnNetworkSpawn()
         {
             if (IsServer) {
-                Debug.Log("Is Host");
-                lobbyPlayers.OnListChanged += HandleLobbyPlayersStateChanged;
+                lobbyPlayers.OnListChanged += HandleLobbyPlayersStateChanged; //Suscribe una funcion cuando se modifique la lista
 
-                startGameButton.gameObject.SetActive(true);
+                startGameButton.gameObject.SetActive(true); //El boton de empezar partida esta activa solo para el servidor
 
+                //Cuando se conecte o desconecte un cliente invoca unas funciones que lo manejan
                 NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
                 NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
 
                 foreach(NetworkClient client in NetworkManager.Singleton.ConnectedClientsList)
                 {
-                    HandleClientConnected(client.ClientId);
+                    HandleClientConnected(client.ClientId); //Si hay una lista de clientes conectados los conecta al servidor
                     
                 }
             }
             else if (IsClient)
             {
-                Debug.Log("Is Client");
-                lobbyPlayers.OnListChanged += HandleLobbyPlayersStateChanged;
+                lobbyPlayers.OnListChanged += HandleLobbyPlayersStateChanged; //Suscribe una funcion cuando se modifique la lista
 
             }
         }
 
-        public override void OnNetworkDespawn()
+        public override void OnNetworkDespawn() //Desuscribe los eventos cuando se cierra
         { 
             if (IsServer)
             {
@@ -66,7 +66,7 @@ namespace Lobby.UI {
             }
         }
 
-        private bool EveryoneReady()
+        private bool EveryoneReady() //Comprueba si hay más de 1 jugador y si están listos
         {
             if(lobbyPlayers.Count < 2)
             {
@@ -84,7 +84,7 @@ namespace Lobby.UI {
             return true;
         }
 
-        private void HandleClientDisconnect(ulong clientId)
+        private void HandleClientDisconnect(ulong clientId) //Para cuando se desconecte un jugador, la lista lo elimina
         {
             for (int i = 0; i<lobbyPlayers.Count; i++)
             {
@@ -97,15 +97,15 @@ namespace Lobby.UI {
             }
         }
 
-        private void HandleClientConnected(ulong clientId)
+        private void HandleClientConnected(ulong clientId) //Cuando se conecta un jugador la lista lo añade creando un nuevo LobbyPlayerState
         {
             foreach (var player in lobbyPlayers) { if (player.ClientId == clientId) { return;  } }
-            Debug.Log(clientId);
+            
             lobbyPlayers.Add(new LobbyPlayerState(clientId, "Player_"+clientId, false, 0, false));
             playerCount.Value = lobbyPlayers.Count;
         }
 
-        public LobbyPlayerState GetPlayer(ulong clientId)
+        public LobbyPlayerState GetPlayer(ulong clientId) //Dependiendo de un id de cliente devuelve el lobbyplayerstate asociado en la lista
         {
             for (int i = 0; i < lobbyPlayers.Count; i++)
             {
@@ -117,7 +117,7 @@ namespace Lobby.UI {
             return new LobbyPlayerState();
         }
 
-        [ServerRpc (RequireOwnership = false)]
+        [ServerRpc (RequireOwnership = false)] //Cuando pulsa el jugador que está listo su variable IsReady se invierte de valor
         private void ToggleReadyServerRpc(ServerRpcParams serverRpcParams = default)
         {
             for (int i = 0; i < lobbyPlayers.Count; i++)
@@ -129,7 +129,7 @@ namespace Lobby.UI {
             }
         }
 
-        [ServerRpc (RequireOwnership = false)]
+        [ServerRpc (RequireOwnership = false)] //Cuando el jugador le da al boton de cambiar el personaje se modifica el ChatacterId
         private void SwapChatacterServerRpc(ServerRpcParams serverRpcParams = default)
         {
             for (int i = 0; i < lobbyPlayers.Count; i++)
@@ -142,12 +142,12 @@ namespace Lobby.UI {
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc(RequireOwnership = false)] //Cuando se le da a empezar partida todos los jugadores cambian su valor InGame a true
         private void StartGameServerRpc(ServerRpcParams serverRpcParams = default)
         {
             if(serverRpcParams.Receive.SenderClientId != NetworkManager.Singleton.LocalClientId) { return; }
 
-            if(!EveryoneReady()) { return; }
+            if(!EveryoneReady()) { return; } //Si no están todos listos no funciona
 
             for (int i = 0; i < lobbyPlayers.Count; i++)
             {
@@ -156,7 +156,7 @@ namespace Lobby.UI {
             }
         }
 
-        [ServerRpc(RequireOwnership = false)]
+        [ServerRpc(RequireOwnership = false)] //Cuando se le da a empezar partida todos los jugadores cambian su valor InGame a true
         private void NameChangeServerRpc(string name, ServerRpcParams serverRpcParams)
         {
             for (int i = 0; i < lobbyPlayers.Count; i++)
@@ -169,6 +169,7 @@ namespace Lobby.UI {
             }
         }
 
+        //Todos los siguientes eventos son intermedios entre los botones de la interfaz y el propio codigo. Invocan funciones Rpc
         public void OnNameChanged(string name)
         {
             NameChangeServerRpc(name, default);
@@ -188,23 +189,24 @@ namespace Lobby.UI {
         {
             SwapChatacterServerRpc();
         }
-
-        private void HandleLobbyPlayersStateChanged(NetworkListEvent<LobbyPlayerState> changeEvent)
+        //---------------------------------------------
+        private void HandleLobbyPlayersStateChanged(NetworkListEvent<LobbyPlayerState> changeEvent) //Cuando se cambia la lista de cualquier forma se actualiza
+                                                                                                    //la interfaz (LobbyPlayer)                                                                        
         {
             for(int i= 0; i<lobbyPlayerCards.Length; i++)
             {
                 if (lobbyPlayers.Count > i)
                 {
-                    lobbyPlayerCards[i].UdpateDisplay(lobbyPlayers[i]);
+                    lobbyPlayerCards[i].UdpateDisplay(lobbyPlayers[i]); //Actualiza la interfaz
                 }
                 else
                 {
-                    lobbyPlayerCards[i].DisableDisplay();
+                    lobbyPlayerCards[i].DisableDisplay(); //Desactiva la tarjeta del jugador que se ha ido
                 }
 
                 if (IsHost)
                 {
-                    startGameButton.interactable = EveryoneReady();
+                    startGameButton.interactable = EveryoneReady(); //Hace el boton start interactuable si todos estan listos
                 }
             }
         }

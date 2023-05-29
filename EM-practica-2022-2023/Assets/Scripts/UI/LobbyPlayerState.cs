@@ -7,14 +7,12 @@ using Unity.Collections;
 
 public struct LobbyPlayerState : INetworkSerializable, IEquatable<LobbyPlayerState>
 {
-    // Start is called before the first frame update
-    public ulong ClientId;
+    //Struct que guarda la informacion de los jugadores del lobby
+    public ulong ClientId; 
     public FixedString64Bytes PlayerName;
     public bool IsReady;
     public int CharacterId;
     public bool InGame;
-
-
 
     public LobbyPlayerState(ulong clientId, FixedString64Bytes playerName, bool isReady, int characterId, bool inGame)
     {
@@ -25,12 +23,12 @@ public struct LobbyPlayerState : INetworkSerializable, IEquatable<LobbyPlayerSta
         InGame = inGame;
     }
 
-    public bool Equals(LobbyPlayerState other)
+    public bool Equals(LobbyPlayerState other) //Metodo necesario de la interfaz IEquatable
     {
         return ClientId == other.ClientId && PlayerName == other.PlayerName && IsReady == other.IsReady && CharacterId==other.CharacterId && InGame==other.InGame;
     }
 
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter //Metodo necesario de la interfaz INetworkSerializable
     {
         serializer.SerializeValue(ref ClientId);
         serializer.SerializeValue(ref PlayerName);

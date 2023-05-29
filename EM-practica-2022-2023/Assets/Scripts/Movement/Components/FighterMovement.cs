@@ -65,8 +65,6 @@ namespace Movement.Components
 
         void Start()
         {
-
-
             _rigidbody2D = GetComponent<Rigidbody2D>();         //Tomamos el rigidBody del personaje
             _animator = GetComponent<Animator>();               //Cogemos su componente animador
             _networkAnimator = GetComponent<NetworkAnimator>(); //Cogemos el network animator

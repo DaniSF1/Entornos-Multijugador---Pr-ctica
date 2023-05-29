@@ -105,13 +105,7 @@ public class GameManager : NetworkBehaviour
     {
         if (IsHost && currentPlayers.Count > 1) { restartButton.interactable = true; }
         else { restartButton.interactable = false; }
-        UpdateTimer();
-        UpdateWin();
-    }
-
-    private void UpdateTimer()
-    {
-
+        
         if (!IsServer || !matchStarted) return;
         time -= Time.deltaTime;
 
@@ -122,15 +116,13 @@ public class GameManager : NetworkBehaviour
             string name = livingNames[i];
             SetNamesClientRpc(i, name);
         }
-    }
 
-    private void UpdateWin()
-    {
         if (time <= timeStart - 10)
         {
             if (livingPlayers.Count == 1 || time <= 0)
             {
                 string player;
+                matchStarted = false;
                 if (livingPlayers.Count == 1)
                 {
                     player = livingPlayers[0].name;
@@ -139,7 +131,6 @@ public class GameManager : NetworkBehaviour
                 {
                     player = EscogerGanador();
                 }
-
                 WinClientRpc(player);
             }
         }
@@ -149,6 +140,7 @@ public class GameManager : NetworkBehaviour
     {
         time = timeStart;
         onGameRestart?.Invoke();
+        matchStarted = true;
         livingPlayers = new List<GameObject>();
         foreach (GameObject player in currentPlayers) 
         { 

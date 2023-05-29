@@ -1,3 +1,4 @@
+using Cinemachine;
 using Lobby.UI;
 using System;
 using TMPro;
@@ -17,9 +18,11 @@ namespace Netcode
         public GameObject Oni;
         public GameObject Huntress;
         public GameObject Akai_Kaze;
+        private Vector3 startPos;
 
         public override void OnNetworkSpawn()
         {
+            GameManager.onGameRestart += PosRestart;
             LobbyPlayer.OnGameStart += InstantiateCharacter;
             //if (!IsOwner) return;
             //InstantiateCharacterServerRpc(OwnerClientId);   //Si no el jugador no es el host, hacemos una llamada RCP para el servidor
@@ -29,14 +32,15 @@ namespace Netcode
         {
             if (!IsOwner) return;
             InstantiateCharacterServerRpc(OwnerClientId, playerData);
-            characterGameObject.GetComponentInChildren<DisplayName>().SetNamesClientRpc(Convert.ToString(playerData.PlayerName));
+            //characterGameObject.GetComponentInChildren<DisplayName>().SetNamesClientRpc(Convert.ToString(playerData.PlayerName));
 
         }
 
         public override void OnDestroy()
         {
             if (!IsServer) return;
-            GameManager.RemovePlayer(characterGameObject);
+            Debug.Log("Me desconecto");
+            GameManager.RemoveDisconectedPlayer(characterGameObject);
             base.OnDestroy();
         }
 
@@ -61,9 +65,18 @@ namespace Netcode
                 characterGameObject = Instantiate(characterPrefab);   //Tomamos el prefab del personaje y lo hacemos un gameobject
                 GameManager.AddPlayer(characterGameObject);
                 characterGameObject.GetComponent<NetworkObject>().SpawnWithOwnership(id);   //Tomamos el networkobject del cliente y
-                transform.position = new Vector3(getPosX(id), 2.7f, 0);
+                startPos = new Vector3(getPosX(id), 2.7f, 0);
+                transform.position = startPos;
                 characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
             }
+        }
+
+        
+        public void PosRestart()
+        {
+            Debug.Log("Reinicia Pos");
+            if(characterGameObject == null) { return; }
+            characterGameObject.transform.position = startPos;
         }
 
         public void getOni()

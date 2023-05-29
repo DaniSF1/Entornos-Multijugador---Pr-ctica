@@ -44,6 +44,7 @@ namespace Movement.Components
         {
             health.Value = 100f;
             health.OnValueChanged += HealthChange;
+            GameManager.onGameRestart += RestartHealth;
         }
 
         private void HealthChange(float previousValue, float newValue)
@@ -51,8 +52,21 @@ namespace Movement.Components
             healthbar.setHealth(newValue);
         }
 
+        private void RestartHealth()
+        {
+            health.Value = healthbar.slider.maxValue;
+
+            if (dead == true) 
+            {
+                dead = false;
+                _animator.SetTrigger("die");
+            }
+        }
+
         void Start()
         {
+
+
             _rigidbody2D = GetComponent<Rigidbody2D>();         //Tomamos el rigidBody del personaje
             _animator = GetComponent<Animator>();               //Cogemos su componente animador
             _networkAnimator = GetComponent<NetworkAnimator>(); //Cogemos el network animator
@@ -178,6 +192,7 @@ namespace Movement.Components
         public void Die()
         {
             dead = true;
+            GameManager.RemoveDeadPlayer(this.gameObject);
             _networkAnimator.SetTrigger(AnimatorDie);
         }
     }

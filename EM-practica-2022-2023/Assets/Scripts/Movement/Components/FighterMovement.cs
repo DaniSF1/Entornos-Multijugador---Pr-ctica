@@ -75,8 +75,6 @@ namespace Movement.Components
 
             //ui cosas
             healthbar.SetMaxHealth(health.Value);
-            //gui.gameObject.SetActive(true);
-
         }
 
         void Update()

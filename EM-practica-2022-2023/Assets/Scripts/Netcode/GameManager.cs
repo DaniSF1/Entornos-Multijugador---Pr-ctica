@@ -168,7 +168,7 @@ public class GameManager : NetworkBehaviour
     {
         time = timeStart;
         onGameRestart?.Invoke();
-        matchStarted = true;
+        matchStarted = false;
         livingPlayers = new List<GameObject>();
         foreach (GameObject player in currentPlayers) 
         { 
@@ -179,6 +179,7 @@ public class GameManager : NetworkBehaviour
         {
             livingNames.Add(name);
         }
+        //currentPlayers = new List<GameObject>();
         RestartClientRpc();
     }
 

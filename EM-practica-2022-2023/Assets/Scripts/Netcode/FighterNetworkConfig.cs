@@ -15,12 +15,16 @@ namespace Netcode
         public override void OnNetworkSpawn()       //Cuando aparece el personaje...
         {
             if (!IsOwner) return;
-            
+            GameManager.onGameRestart += RestartClientRpc;
             FighterMovement fighterMovement = GetComponent<FighterMovement>();  //Tomamos el tipo de su movimiento
             InputSystem.Instance.Character = fighterMovement;                   //Instanciamos en el InputSystem dicho movimiento para manejarlo
             ICinemachineCamera virtualCamera = CinemachineCore.Instance.GetActiveBrain(0).ActiveVirtualCamera;  //Configuramos la cámara para que siga al jugador
             virtualCamera.Follow = transform;                                   //Hacemos que la cámara siga al jugador            
         }
 
+        [ClientRpc]
+        private void RestartClientRpc() { 
+            Destroy(gameObject);
+        }
     }
 }

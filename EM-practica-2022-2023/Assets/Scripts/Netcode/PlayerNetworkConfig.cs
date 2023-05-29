@@ -77,7 +77,7 @@ namespace Netcode
         {
             Debug.Log("Reinicia Pos");
             if(characterGameObject == null) { return; }
-            characterGameObject.transform.position = startPos;
+            characterGameObject = null;
         }
 
         public void getOni()

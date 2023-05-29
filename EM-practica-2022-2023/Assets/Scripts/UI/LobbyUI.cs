@@ -25,6 +25,7 @@ namespace Lobby.UI {
             lobbyPlayers = new NetworkList<LobbyPlayerState>();
             playerCount = new NetworkVariable<int>();
             playerCount.Value = 0;
+            GameManager.onGameRestart += OnRestart;
         }
 
         public override void OnNetworkSpawn()
@@ -68,7 +69,7 @@ namespace Lobby.UI {
 
         private bool EveryoneReady()
         {
-            if(lobbyPlayers.Count < 2)
+            if(lobbyPlayers.Count < 1)
             {
                 return false;
             }
@@ -115,6 +116,17 @@ namespace Lobby.UI {
                 }
             }
             return new LobbyPlayerState();
+        }
+
+
+        [ServerRpc(RequireOwnership = false)]
+        private void RestartServerRpc(ServerRpcParams serverRpcParams = default)
+        {
+            for (int i = 0; i < lobbyPlayers.Count; i++)
+            {
+                    lobbyPlayers[i] = new LobbyPlayerState(lobbyPlayers[i].ClientId, lobbyPlayers[i].PlayerName,
+                        !lobbyPlayers[i].IsReady, lobbyPlayers[i].CharacterId, false);
+            }
         }
 
         [ServerRpc (RequireOwnership = false)]
@@ -189,6 +201,11 @@ namespace Lobby.UI {
             SwapChatacterServerRpc();
         }
 
+        public void OnRestart()
+        {
+            RestartServerRpc();
+        }
+
         private void HandleLobbyPlayersStateChanged(NetworkListEvent<LobbyPlayerState> changeEvent)
         {
             for(int i= 0; i<lobbyPlayerCards.Length; i++)
@@ -202,7 +219,7 @@ namespace Lobby.UI {
                     lobbyPlayerCards[i].DisableDisplay();
                 }
 
-                if (IsHost)
+                if (IsServer)
                 {
                     startGameButton.interactable = EveryoneReady();
                 }

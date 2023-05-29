@@ -1,16 +1,17 @@
+using JetBrains.Annotations;
 using Lobby.UI;
 using Movement.Components;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
-    public static List<GameObject> jugadores = new List<GameObject>();
     public static List<string> names = new List<string>();
     public static List<Text> playerNames = new List<Text>();
 
@@ -19,13 +20,18 @@ public class GameManager : NetworkBehaviour
     [SerializeField] Text p3Name;
     [SerializeField] Text p4Name;
 
+    static List<GameObject> livingPlayers = new List<GameObject>();
+    static List<GameObject> currentPlayers = new List<GameObject>();
+
     public GameObject wincanvas;
     public Text winnerName;
 
     [SerializeField] Text timerText;
+    [SerializeField] Button restartButton;
     static float timeStart = 180f;
     static float time;
     static bool matchStarted;
+    public static Action onGameRestart;
 
     private void Awake()
     {
@@ -46,17 +52,21 @@ public class GameManager : NetworkBehaviour
 
     public static void AddPlayer(GameObject player)
     {
-        Debug.Log("Añadido un jugador");
-        jugadores.Add(player);
-        names.Add(player.name);
+        livingPlayers.Add(player);
+        currentPlayers.Add(player);
     }
 
-    public static void RemovePlayer(GameObject player)
+    public static void RemoveDisconectedPlayer(GameObject player)
     {
-        Debug.Log("Jugador sacado");
-        jugadores.Remove(player);
         int aux = names.IndexOf(player.name);
         names[aux] = null;
+        livingPlayers.Remove(player);
+        currentPlayers.Remove(player);
+    }
+
+    public static void RemoveDeadPlayer(GameObject player)
+    {
+        livingPlayers.Remove(player);
     }
 
     public static void VictoryCondition(string player)
@@ -74,7 +84,7 @@ public class GameManager : NetworkBehaviour
     {
         int aux = 0;
         GameObject ganador = null;
-        foreach (GameObject go in jugadores) 
+        foreach (GameObject go in livingPlayers) 
         { 
             if(go.GetComponent<FighterMovement>().health.Value >= aux)
             {
@@ -84,19 +94,28 @@ public class GameManager : NetworkBehaviour
         }
         return ganador.name;
     }
-
     public void Update()
     {
+        if (IsHost && currentPlayers.Count > 1) { restartButton.interactable = true; }
+        else { restartButton.interactable = false; }
+        UpdateTimer();
+        UpdateWin();
+
+    }
+
+    private void UpdateTimer()
+    {
+
         if (!IsServer || !matchStarted) return;
         time -= Time.deltaTime;
 
         UpdateTimerClientRpc(time);
 
-        foreach (GameObject player in jugadores)
+        foreach (GameObject player in livingPlayers)
         {
             if (player.GetComponent<FighterMovement>().dead == true)
             {
-                RemovePlayer(player);
+                RemoveDisconectedPlayer(player);
             }
         }
         
@@ -105,15 +124,19 @@ public class GameManager : NetworkBehaviour
             string name = names[i];
             SetNamesClientRpc(i, name);
         }
+    }
 
+
+    private void UpdateWin()
+    {
         if (time <= timeStart - 10)
         {
-            if (jugadores.Count == 1 || time <= 0)
+            if (livingPlayers.Count == 1 || time <= 0)
             {
                 string player;
-                if (jugadores.Count == 1)
+                if (livingPlayers.Count == 1)
                 {
-                    player = jugadores[0].name;
+                    player = livingPlayers[0].name;
                 }
                 else
                 {
@@ -123,6 +146,27 @@ public class GameManager : NetworkBehaviour
                 WinClientRpc(player);
             }
         }
+    }
+
+
+    public void OnGameRestart()
+    {
+        time = timeStart;
+        onGameRestart?.Invoke();
+        RestartClientRpc();
+        RestartServerRpc();
+    }
+
+    [ServerRpc]
+    public void RestartServerRpc()
+    {
+        livingPlayers = currentPlayers;
+    }
+
+    [ClientRpc]
+    public void RestartClientRpc()
+    {
+        wincanvas.SetActive(false);
     }
 
     [ClientRpc]

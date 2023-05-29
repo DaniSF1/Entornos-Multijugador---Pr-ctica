@@ -26,7 +26,6 @@ namespace Lobby.UI {
 
         public override void OnNetworkSpawn()
         {
-            Debug.Log("Awake");
             if (IsServer) {
                 Debug.Log("Is Host");
                 lobbyPlayers.OnListChanged += HandleLobbyPlayersStateChanged;
@@ -184,7 +183,6 @@ namespace Lobby.UI {
         {
             SwapChatacterServerRpc();
         }
-
 
         private void HandleLobbyPlayersStateChanged(NetworkListEvent<LobbyPlayerState> changeEvent)
         {

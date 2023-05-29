@@ -16,7 +16,7 @@ namespace Movement.Components
         public float jumpAmount = 1.0f;
         public NetworkVariable<float> health = new NetworkVariable<float>();
         public float damage = 10.0f;
-        public bool dead = false;
+        public NetworkVariable<bool> dead = new NetworkVariable<bool>();
 
         private Rigidbody2D _rigidbody2D;           //RigidBody del personaje
         private Animator _animator;                 //Definimos un animador
@@ -45,6 +45,7 @@ namespace Movement.Components
             health.Value = 100f;
             health.OnValueChanged += HealthChange;
             GameManager.onGameRestart += RestartHealth;
+            dead.Value = false;
         }
 
         private void HealthChange(float previousValue, float newValue)
@@ -56,9 +57,9 @@ namespace Movement.Components
         {
             health.Value = healthbar.slider.maxValue;
 
-            if (dead == true) 
+            if (dead.Value == true) 
             {
-                dead = false;
+                dead.Value = false;
                 _animator.SetTrigger("die");
             }
         }
@@ -94,7 +95,7 @@ namespace Movement.Components
 
         public void Move(IMoveableReceiver.Direction direction)
         {
-            if (dead) return;
+            if (dead.Value) return;
             MoveServerRpc(direction);
             /*
             //if (direction == IMoveableReceiver.Direction.None)  //Si estamos quietos no nos movemos
@@ -112,7 +113,7 @@ namespace Movement.Components
         [ServerRpc]
         public void MoveServerRpc(IMoveableReceiver.Direction direction)
         {
-            if (dead) return;
+            if (dead.Value) return;
             if (direction == IMoveableReceiver.Direction.None)  //Si estamos quietos no nos movemos
             {
                 this._direction = Vector3.zero;
@@ -126,7 +127,7 @@ namespace Movement.Components
 
         public void Jump(IJumperReceiver.JumpStage stage)
         {
-            if (dead) return;
+            if (dead.Value) return;
             JumpServerRpc(stage);
             /*
             switch (stage)
@@ -147,7 +148,7 @@ namespace Movement.Components
         [ServerRpc]
         public void JumpServerRpc(IJumperReceiver.JumpStage stage)
         {
-            if (dead) return;
+            if (dead.Value) return;
             switch (stage)
             {
                 case IJumperReceiver.JumpStage.Jumping:     //Si el personaje esta saltando...
@@ -164,32 +165,39 @@ namespace Movement.Components
 
         public void Attack1()
         {
+            if (dead.Value) return;
             _networkAnimator.SetTrigger(AnimatorAttack1);
         }
 
         public void Attack2()
         {
+            if (dead.Value) return;
             _networkAnimator.SetTrigger(AnimatorAttack2);
         }
 
         public void TakeHit()
         {
-            if(!IsServer || dead) return;
+            if(!IsServer) return;
             health.Value -= damage;
             Debug.Log($"Other player's healt: {health}");
-            _networkAnimator.SetTrigger(AnimatorHit);
 
             if(health.Value <= 0)
             {
                 Die();
             }
+            else
+            {
+                _networkAnimator.SetTrigger(AnimatorHit);
+            }
         }
 
         public void Die()
         {
-            dead = true;
+            if (dead.Value == true) return;
+            dead.Value = true;
             _networkAnimator.SetTrigger(AnimatorDie);
             GameManager.RemoveDeadPlayer(this.gameObject);
         }
+
     }
 }

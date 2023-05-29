@@ -192,8 +192,8 @@ namespace Movement.Components
         public void Die()
         {
             dead = true;
-            GameManager.RemoveDeadPlayer(this.gameObject);
             _networkAnimator.SetTrigger(AnimatorDie);
+            GameManager.RemoveDeadPlayer(this.gameObject);
         }
     }
 }

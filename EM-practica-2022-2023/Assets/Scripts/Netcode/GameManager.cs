@@ -12,7 +12,8 @@ using UnityEngine.UI;
 
 public class GameManager : NetworkBehaviour
 {
-    public static List<string> names = new List<string>();
+    public static List<string> currentNames = new List<string>();
+    public static List<string> livingNames = new List<string>();
     public static List<Text> playerNames = new List<Text>();
 
     [SerializeField] Text p1Name;
@@ -28,7 +29,7 @@ public class GameManager : NetworkBehaviour
 
     [SerializeField] Text timerText;
     [SerializeField] Button restartButton;
-    static float timeStart = 180f;
+    static float timeStart = 90f;
     static float time;
     static bool matchStarted;
     public static Action onGameRestart;
@@ -53,13 +54,16 @@ public class GameManager : NetworkBehaviour
     public static void AddPlayer(GameObject player)
     {
         livingPlayers.Add(player);
+        livingNames.Add(player.name);
+        currentNames.Add(player.name);
         currentPlayers.Add(player);
     }
 
     public static void RemoveDisconectedPlayer(GameObject player)
     {
-        int aux = names.IndexOf(player.name);
-        names[aux] = null;
+        int aux = livingNames.IndexOf(player.name);
+        livingNames[aux] = null;
+        currentNames[aux] = null;
         livingPlayers.Remove(player);
         currentPlayers.Remove(player);
     }
@@ -67,6 +71,8 @@ public class GameManager : NetworkBehaviour
     public static void RemoveDeadPlayer(GameObject player)
     {
         livingPlayers.Remove(player);
+        int aux = livingNames.IndexOf(player.name);
+        livingNames[aux] = null;
     }
 
     public static void VictoryCondition(string player)
@@ -76,7 +82,7 @@ public class GameManager : NetworkBehaviour
 
     public void Start()
     {
-       // winnerName = wincanvas.GetComponent<Text>();
+        // winnerName = wincanvas.GetComponent<Text>();
         wincanvas.SetActive(false);
     }
 
@@ -84,23 +90,23 @@ public class GameManager : NetworkBehaviour
     {
         int aux = 0;
         GameObject ganador = null;
-        foreach (GameObject go in livingPlayers) 
-        { 
-            if(go.GetComponent<FighterMovement>().health.Value >= aux)
+        foreach (GameObject go in livingPlayers)
+        {
+            if (go.GetComponent<FighterMovement>().health.Value >= aux)
             {
-                aux = (int) go.GetComponent<FighterMovement>().health.Value;
+                aux = (int)go.GetComponent<FighterMovement>().health.Value;
                 ganador = go;
             }
         }
         return ganador.name;
     }
+
     public void Update()
     {
         if (IsHost && currentPlayers.Count > 1) { restartButton.interactable = true; }
         else { restartButton.interactable = false; }
         UpdateTimer();
         UpdateWin();
-
     }
 
     private void UpdateTimer()
@@ -111,21 +117,12 @@ public class GameManager : NetworkBehaviour
 
         UpdateTimerClientRpc(time);
 
-        foreach (GameObject player in livingPlayers)
+        for (int i = 0; i < livingNames.Count; i++)
         {
-            if (player.GetComponent<FighterMovement>().dead == true)
-            {
-                RemoveDisconectedPlayer(player);
-            }
-        }
-        
-        for (int i = 0; i < names.Count; i++)
-        {
-            string name = names[i];
+            string name = livingNames[i];
             SetNamesClientRpc(i, name);
         }
     }
-
 
     private void UpdateWin()
     {
@@ -148,31 +145,41 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
     public void OnGameRestart()
     {
         time = timeStart;
         onGameRestart?.Invoke();
+        livingPlayers = new List<GameObject>();
+        foreach (GameObject player in currentPlayers) 
+        { 
+            livingPlayers.Add(player);
+        }
+        livingNames = new List<string>();
+        foreach (string name in currentNames)
+        {
+            livingNames.Add(name);
+        }
         RestartClientRpc();
-        RestartServerRpc();
-    }
-
-    [ServerRpc]
-    public void RestartServerRpc()
-    {
-        livingPlayers = currentPlayers;
     }
 
     [ClientRpc]
     public void RestartClientRpc()
     {
         wincanvas.SetActive(false);
+        foreach (GameObject player in currentPlayers)
+        {
+            Debug.Log("Jugadores conectados" + player.name);
+        }
+        foreach (GameObject player in livingPlayers)
+        {
+            Debug.Log("Jugadores vivos " + player.name);
+        }
     }
 
     [ClientRpc]
     public void SetNamesClientRpc(int i, string name)
     {
-        if(name != null)
+        if (name != null)
         {
             playerNames[i].gameObject.SetActive(true);
             playerNames[i].text = name;

@@ -6,8 +6,8 @@ using Unity.Netcode;
 
 public class DisplayName : MonoBehaviour
 {
-    [SerializeField] private TMP_Text displayName;
-    GameObject jugador;
+    [SerializeField] private TMP_Text displayName;      //Caja de texto que contendra el nombre del jugador
+    GameObject jugador;                                 //GameObject del jugador (esta variable asi como la siguiente funcion fueron descartados al final)
 
     public void getPlayer(GameObject player)
     {
@@ -16,7 +16,7 @@ public class DisplayName : MonoBehaviour
     }
 
     [ClientRpc]
-    public void SetNamesClientRpc(string name)
+    public void SetNamesClientRpc(string name)          //Mostramos en el cliente el nombre del jugador
     {
         displayName.text = name;
     }

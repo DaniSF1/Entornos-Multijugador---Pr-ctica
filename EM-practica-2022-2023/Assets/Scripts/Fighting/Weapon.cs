@@ -17,13 +17,13 @@ namespace Fighting
 
             
             Vector3 hitpoint = collision.GetContact(0).point;           //Ponemos en el lugar de la colisión dicho efecto
-            GetComponent<WeaponFX>().ColisionParticulaClientRpc(Hit03, hitpoint);
+            GetComponent<WeaponFX>().ColisionParticulaClientRpc(Hit03, hitpoint);   //Llamamos al componente WeaponFX para
+                                                                                    //que las particulas se instancien solo
+                                                                                    //en el cliente
 
-            // TODO: Review if this is the best way to do this
             IFighterReceiver enemy = otherObject.GetComponent<IFighterReceiver>();  //Cargamos el enemigo contra el que choca el ataque
             if (enemy != null)       //Si hay enemigo...
-                enemy.TakeHit();     //el enemigo recibe daño
-            //No funciona
+                enemy.TakeHit();     //el enemigo recibe daño.
         }
     }
 }

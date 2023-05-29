@@ -1015,6 +1015,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7909192859141269047, guid: cb181b31953c5db4fbbee5399d4b73e8, type: 3}
   m_PrefabInstance: {fileID: 2093977399}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &589221332 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7909192859141269002, guid: cb181b31953c5db4fbbee5399d4b73e8, type: 3}
+  m_PrefabInstance: {fileID: 2093977399}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589221331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110ee4ae108f1d444b8a59afc2f13340, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &607949240
 GameObject:
   m_ObjectHideFlags: 0
@@ -1069,6 +1080,7 @@ MonoBehaviour:
   winnerName: {fileID: 207131740}
   timerText: {fileID: 1889805510}
   restartButton: {fileID: 1963448836}
+  inputSystem: {fileID: 589221332}
 --- !u!4 &607949243
 Transform:
   m_ObjectHideFlags: 0
@@ -13833,7 +13845,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1389431229}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.8608799, y: 0.48484346, z: -10.063926}
+  m_LocalPosition: {x: 0.86347103, y: 0.48484346, z: -10.063926}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -8,6 +8,7 @@ namespace Systems
 {
     public class InputSystem : MonoBehaviour
     {
+        private bool disable = true;
         private static InputSystem _instance;
         public static InputSystem Instance => _instance;
 
@@ -46,6 +47,17 @@ namespace Systems
             }
         }
 
+        public void EnableInputs()
+        {
+            disable = false;
+        }
+
+        public void DisableInputs()
+        {
+            disable = true;
+
+        }
+
         public void SetCharacter(FighterMovement character)
         {
             _commands = new Dictionary<string, ICommand> {
@@ -67,12 +79,14 @@ namespace Systems
 
             Attack1.started += context =>
             {
+                if (disable) return;
                 _commands["attack1"].Execute();
             };
             Attack1.Enable();
 
             Attack2.started += context =>
             {
+                if (disable) return;
                 _commands["attack2"].Execute();
             };
             Attack2.Enable();
@@ -81,6 +95,7 @@ namespace Systems
 
         public void OnMove(InputAction.CallbackContext context)
         {
+            if (disable) return;
             float value = context.ReadValue<float>();
 
             // Debug.Log($"OnMove called {context.action}");
@@ -102,6 +117,7 @@ namespace Systems
 
         public void OnJump(InputAction.CallbackContext context)
         {
+            if (disable) return;
             float value = context.ReadValue<float>();
 
             // Debug.Log($"OnJump called {context.ReadValue<float>()}");

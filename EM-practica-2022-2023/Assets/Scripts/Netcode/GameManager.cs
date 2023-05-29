@@ -1,11 +1,13 @@
 using JetBrains.Annotations;
 using Lobby.UI;
 using Movement.Components;
+using Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Systems;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -32,13 +34,18 @@ public class GameManager : NetworkBehaviour
     static float timeStart = 90f;
     static float time;
     static bool matchStarted;
+    [SerializeField] private InputSystem inputSystem;
+    private int players = 0;
     public static Action onGameRestart;
 
     private void Awake()
     {
         time = timeStart;
         matchStarted = false;
-        LobbyPlayer.OnGameStart += (a) => matchStarted = true;
+        //LobbyPlayer.OnGameStart += (a) => matchStarted = true;
+        PlayerNetworkConfig.playerLoaded += FreePlayers;
+
+        inputSystem = FindObjectOfType<InputSystem>();
 
         playerNames.Add(p1Name);
         playerNames.Add(p2Name);
@@ -136,6 +143,27 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    public void FreePlayers()
+    {
+        players++;
+        if(players == LobbyUI.playerCount.Value) { 
+            EnableInputSystemClientRpc();
+            matchStarted = true;
+        }
+    }
+
+    [ClientRpc]
+    public void DisableInputSystemClientRpc()
+    {
+        inputSystem.DisableInputs();
+    }
+
+    [ClientRpc]
+    public void EnableInputSystemClientRpc()
+    {
+        inputSystem.EnableInputs();
+    }
+
     public void OnGameRestart()
     {
         time = timeStart;
@@ -157,6 +185,7 @@ public class GameManager : NetworkBehaviour
     [ClientRpc]
     public void RestartClientRpc()
     {
+        EnableInputSystemClientRpc();
         wincanvas.SetActive(false);
         foreach (GameObject player in currentPlayers)
         {
@@ -189,6 +218,7 @@ public class GameManager : NetworkBehaviour
         string winner = win;
         winnerName.text = winner;
         wincanvas.SetActive(true);
+        DisableInputSystemClientRpc();
     }
 
     [ClientRpc]

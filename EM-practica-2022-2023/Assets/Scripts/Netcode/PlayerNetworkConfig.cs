@@ -19,6 +19,7 @@ namespace Netcode
         public GameObject Huntress;
         public GameObject Akai_Kaze;
         private Vector3 startPos;
+        public static Action playerLoaded; 
 
         public override void OnNetworkSpawn()
         {
@@ -67,6 +68,7 @@ namespace Netcode
                 startPos = new Vector3(getPosX(id), 2.7f, 0);
                 transform.position = startPos;
                 characterGameObject.transform.SetParent(transform, false);                  //Colocamos al cliente en el mapa
+                playerLoaded?.Invoke();
             }
         }
 

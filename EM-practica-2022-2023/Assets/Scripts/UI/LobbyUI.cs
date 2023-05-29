@@ -16,12 +16,15 @@ namespace Lobby.UI {
         [SerializeField] private Button startGameButton;
         [SerializeField] private TMP_InputField playerName;
         [SerializeField] private GameObject lobbyPanel;
+        public static NetworkVariable<int> playerCount;
 
         private NetworkList<LobbyPlayerState> lobbyPlayers;
 
         private void Awake()
         {
             lobbyPlayers = new NetworkList<LobbyPlayerState>();
+            playerCount = new NetworkVariable<int>();
+            playerCount.Value = 0;
         }
 
         public override void OnNetworkSpawn()
@@ -65,7 +68,7 @@ namespace Lobby.UI {
 
         private bool EveryoneReady()
         {
-            if(lobbyPlayers.Count< 1)
+            if(lobbyPlayers.Count < 2)
             {
                 return false;
             }
@@ -88,6 +91,7 @@ namespace Lobby.UI {
                 if (lobbyPlayers[i].ClientId == clientId)
                 {
                     lobbyPlayers.RemoveAt(i);
+                    playerCount.Value = lobbyPlayers.Count;
                     break;
                 }
             }
@@ -98,6 +102,7 @@ namespace Lobby.UI {
             foreach (var player in lobbyPlayers) { if (player.ClientId == clientId) { return;  } }
             Debug.Log(clientId);
             lobbyPlayers.Add(new LobbyPlayerState(clientId, "Player_"+clientId, false, 0, false));
+            playerCount.Value = lobbyPlayers.Count;
         }
 
         public LobbyPlayerState GetPlayer(ulong clientId)

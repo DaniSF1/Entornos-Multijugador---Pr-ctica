@@ -55,7 +55,8 @@ public class GameManager : NetworkBehaviour
     {
         Debug.Log("Jugador sacado");
         jugadores.Remove(player);
-        names.Remove(player.name);
+        int aux = names.IndexOf(player.name);
+        names[aux] = null;
     }
 
     public static void VictoryCondition(string player)
@@ -123,12 +124,19 @@ public class GameManager : NetworkBehaviour
             }
         }
     }
-    
+
     [ClientRpc]
     public void SetNamesClientRpc(int i, string name)
     {
-        playerNames[i].gameObject.SetActive(true);
-        playerNames[i].text = name;
+        if(name != null)
+        {
+            playerNames[i].gameObject.SetActive(true);
+            playerNames[i].text = name;
+        }
+        else
+        {
+            playerNames[i].gameObject.SetActive(false);
+        }
     }
 
     [ClientRpc]
